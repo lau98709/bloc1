@@ -4,17 +4,12 @@ from consolemenu.items import *
 from Format_GIFT import *
 from random import randint
 
-#
-# Example 3 shows the use of a multi-select menu. A multi-select menu will execute all of the
-# selected actions with a single user input prompt.
-#
-
-
+#Choix de la saisie manuelle des questions
 def SaisieManuelle():
     print("Saisie manuelle des questions")
     Screen().input('Press [Enter] to continue')
 
-
+#Choix de la génération automatique des questions
 def GenerationAuto():
 #    bases = {'décimale','hexadécimale','binaire'}
 #
@@ -34,17 +29,17 @@ def GenerationAuto():
 
 def main():
 
-    # Create the root menu
-    menu = MultiSelectMenu("Root Menu", "This is a Multi-Select Menu",
+    # Création du menu principal
+    menu = MultiSelectMenu("Menu principal", "Choisir l'option souhaitée",
                            epilogue_text=("Please select one or more entries separated by commas, and/or a range "
                                           "of numbers. For example:  1,2,3   or   1-4   or   1,3-4"),
-                           exit_option_text='Exit Application')  # Customize the exit text
+                           exit_option_text=('Exit Application')  # Customize the exit text
 
-    # Add all the items to the root menu
+    # Ajout des choix possibles au menu principal
     menu.append_item(FunctionItem("Saisie manuelle des questions", SaisieManuelle, args=[]))
     menu.append_item(FunctionItem("Génération automatique des questions de conversion", GenerationAuto, args=[]))
 
-    # Show the menu
+    # Affichage du menu
     menu.start()
     menu.join()
 
