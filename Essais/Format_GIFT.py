@@ -157,7 +157,7 @@ class Question():
     # Représentation d'une question
     
     titre = ""                  # Titre de la question entre ::
-    question = ""               # Texte de la question
+    enonce = ""               # Texte de la question
     bloc_reponses = None       # blocs reponses
 
     fichier = None              # Objet pour lecture écriture du fichier
@@ -242,7 +242,7 @@ class Question():
     def ReadGIFT(self, nomfichier):
         # Lecture d'un fichier GIFT
         self.fichier = io.open(nomfichier, mode="r", encoding="utf-8")     # Ouverture mode UTF-8
-        self.question = ""
+        self.enonce = ""
         while True:
             c = self.Read()
             if (len(c)==0): 
@@ -252,29 +252,29 @@ class Question():
                 s = self.ReadBlocReponses()
                 self.bloc_reponses = BlocReponses()
                 self.bloc_reponses.Parse(s)
-                self.question += "%Q"
+                self.enonce += "%Q"
                 continue
             elif (c == ":"):
                 # Lecture d'un titre
                 c1 = self.ReadTitre()
                 if (c1 != None): pass
                 continue
-            self.question += c
+            self.enonce += c
             
     
     def WriteGIFT(self, nomfichier):
         self.fichier = io.open(nomfichier, mode="w", encoding="utf-8")     # Ouverture mode UTF-8
         if (self.title != ""): self.fichier.write("::"+self.titre+"::")
-        if (self.question != ""): self.fichier.write(self.question)
+        if (self.enonce != ""): self.fichier.write(self.enonce)
         if (self.bloc_reponses != None):
             pass
 
-#
+#        
 #q = Question()
 #
 #q.ReadGIFT("Test001.txt")
 #print("\""+q.titre+"\"")
-#print("\""+q.question+"\"")
+#print("\""+q.enonce+"\"")
 #print(len(q.bloc_reponses.reponses))
 #for res in q.bloc_reponses.reponses:
 #    print(res.type, res.exact, res.text, res.valeur)
