@@ -8,6 +8,7 @@ from random import randint
 def SaisieManuelle():
     print("Saisie manuelle des questions")
     Screen().input('Press [Enter] to continue')
+    
 
 #Choix de la génération automatique des questions
 def GenerationAuto():
@@ -36,7 +37,7 @@ def main():
     menu = MultiSelectMenu("Menu principal", "Choisir l'option souhaitée",
                            epilogue_text=("Please select one or more entries separated by commas, and/or a range "
                                           "of numbers. For example:  1,2,3   or   1-4   or   1,3-4"),
-                           exit_option_text=('Exit Application')  # Customize the exit text
+                           exit_option_text=('Exit Application'))  # Customize the exit text
 
     # Ajout des choix possibles au menu principal
     menu.append_item(FunctionItem("Saisie manuelle des questions", SaisieManuelle, args=[]))
