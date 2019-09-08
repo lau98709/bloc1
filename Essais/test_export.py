@@ -36,14 +36,17 @@ class Reponse():
     
     type = None
     exact = False
+    pourcent = 100
     text = None
     valeur = 0
-    pourcent = 100
     min = 0
     max = 0
     retroaction = None
 
     def Parse(self, s):
+        # Interprétation d'une réponse
+        
+        # Extraire la rétroaction si elle existe
         self.retroaction = ""
         ri = s.find('#')
         if (ri != -1):
@@ -51,11 +54,13 @@ class Reponse():
            s = s[:ri]
         #print("\""+self.retroaction+"\"")
 
+        # Bonne réponse, mauvaise réponse
         if (s[0]=='='):
             self.exact = True
         elif (s[0]=='~'):
             self.exact = False
 
+        # Extraire le texte de la réponse
         if ((s[0]=='=') or (s[0]=='~')):
             s2 = s[1:]
             if (s2[0]=="%"):
@@ -63,16 +68,19 @@ class Reponse():
                 for i in range(1,len(s2)):
                     if (s2[i]=='%'): break
                 self.pourcent = int(s2[1:i])
-                s2 = s2[i+1:]
+                s2 = s2[i+1:]                
                 #print(pourcent, "\""+s2+"\"")
             else:
                 self.pourcent = 100
             self.text = s2
+            self.type = 0
 
 
     def ParseNum(self):
+        # Interprétation d'une réponse numérique
+                
         i = self.text.find("..")
-        if (i != -1):
+        if (i != -1):           # Si interval
             self.min = int(self.text[0:i])
             self.max = int(self.text[i+2:])
             self.valeur = (self.min + self.max)/2
@@ -80,27 +88,30 @@ class Reponse():
             f = self.text.split(':')
             self.valeur = int(f[0])
             if (len(f) == 2):
+                # Si 2 champs, une valeur, un delta
                 delta = int(f[1])
                 self.min = self.valeur - delta
                 self.max = self.valeur + delta
-            elif (len(f) == 3):                
-                self.min = self.valeur - int(f[1])
-                self.max = self.valeur + int(f[2])
         else:
+            # Valeur unique
             self.valeur = self.min = self.max = int(self.text)
+        self.type = 1
         #print(self.valeur, self.min, self.max)
     
 
-class BlocReponse():
-    reponses = None
-    type = 0
-    retroaction = ""
+class BlocReponses():
+    # Représentation d'un bloc de réponse
+    
+    reponses = None             # Liste des réponses
+    type = 0                    # Type de questions
+    retroaction = ""            # Rétroaction globale
 
     def __init__(self):
         self.reponses = list()
 
 
     def Parse(self, s):
+        # Interprétation d'un bloc de réponse
 
         # Extraction et retrait de la rétrocation globale
         gri = s.find("####")
@@ -115,12 +126,14 @@ class BlocReponse():
 
         sl = s.lower()
         if ((sl == "t") or (sl == "f") or (sl == "True") or (sl == "false")):
+            # Si question type vrai ou faux
             self.type = 2    # TRUE or FALSE
 
         else:
+            # Type de question numérique ou QCM
             if (s[0]=='#'):
-                self.type = 1    # Numérique
-                s = Trim(s[1:])
+                self.type = 1       # Numérique
+                s = Trim(s[1:])     # Retrait du signe #
             else:
                 self.type = 0
 
@@ -141,23 +154,24 @@ class BlocReponse():
 
 
 class Question():
-    titre = ""
-    question = ""
-    blocs_reponses = None       # blocs reponses
-    retour_general = ""
+    # Représentation d'une question
+    
+    titre = ""                  # Titre de la question entre ::
+    question = ""               # Texte de la question
+    bloc_reponses = None       # blocs reponses
 
-    fichier = None
+    fichier = None              # Objet pour lecture écriture du fichier
 
-    buffer = ""
-    bufsize = 5
+    buffer = ""                 # Buffer de lecture du fichier
+    bufsize = 5                 #   contient les derniers caractères lus
 
 
-    def __init__(self, nom):
-        self.fichier = io.open(nom, mode="r", encoding="utf-8")     # Ouverture mode UTF-8
-        self.blocs_reponses = list()
-
+    def __init__(self):
+        pass
 
     def Read0(self):
+        # Lecture bufferisé du fichier
+        #   Permet de retenir les derniers caractères lus
         c = self.fichier.read(1)
         self.buffer = self.buffer + c
         self.buffer = self.buffer[-self.bufsize:]
@@ -166,6 +180,8 @@ class Question():
 
 
     def Read(self):
+        # Lecture du fichier en ignorant les "retours chariot" et
+        #   les commentaires
         c = self.Read0()
         if (len(c)==0): return ""
         if (ord(c)==10): return self.Read()
@@ -180,6 +196,9 @@ class Question():
 
 
     def ReadCommentaire(self):
+        # Rejet des commentaires
+        # (Lire jusqu'à la fin de la ligne)
+        # Le pointeur de fichier doit être sur le 2e '/' du commentaire
         c = self.Read0()
         if (c=="/"):
             while True:
@@ -190,6 +209,8 @@ class Question():
 
 
     def ReadTitre(self):
+        # Lecture du titre
+        # Le pointeur de fichier doit être sur le 2e ':' du titre
         c = self.Read()
         if (c==":"):
             self.titre = ""
@@ -207,37 +228,53 @@ class Question():
         return None
 
 
-    def ReadBlocReponse(self):
-        self.blocs_reponses = ""
+    def ReadBlocReponses(self):
+        # Lecture d'un bloc réponse {}
+        s = ""
         while True:
             c = self.Read()
             if (len(c)==0): break
             if (c == "}"): break
-            self.blocs_reponses += c
+            s += c
+        return s
 
 
-    def ReadGIFT(self):
+    def ReadGIFT(self, nomfichier):
+        # Lecture d'un fichier GIFT
+        self.fichier = io.open(nomfichier, mode="r", encoding="utf-8")     # Ouverture mode UTF-8
         self.question = ""
         while True:
             c = self.Read()
-            if (len(c)==0): break;
-            if (c == "{"):
-                self.ReadBlocReponse()
+            if (len(c)==0): 
+                break;
+            elif (c == "{"):
+                # Lecture de bloc de réponses
+                s = self.ReadBlocReponses()
+                self.bloc_reponses = BlocReponses()
+                self.bloc_reponses.Parse(s)
                 self.question += "%Q"
                 continue
-            if (c == ":"):
+            elif (c == ":"):
+                # Lecture d'un titre
                 c1 = self.ReadTitre()
                 if (c1 != None): pass
                 continue
             self.question += c
+            
+    
+    def WriteGIFT(self, nomfichier):
+        self.fichier = io.open(nomfichier, mode="w", encoding="utf-8")     # Ouverture mode UTF-8
+        if (self.title != ""): self.fichier.write("::"+self.titre+"::")
+        if (self.question != ""): self.fichier.write(self.question)
+        if (self.bloc_reponses != None):
+            pass
 
 
-q = Question("Test001.txt")
+q = Question()
 
-q.ReadGIFT()
+q.ReadGIFT("Test001.txt")
 print("\""+q.titre+"\"")
 print("\""+q.question+"\"")
-#print("\""+q.blocs_reponses+"\"")
-
-bloc = BlocReponse()
-bloc.Parse(q.blocs_reponses)
+print(len(q.bloc_reponses.reponses))
+for res in q.bloc_reponses.reponses:
+    print(res.type, res.exact, res.text, res.valeur)
