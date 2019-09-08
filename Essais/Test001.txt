@@ -1,0 +1,9 @@
+// Question : 1 Nom : Grant's tomb
+::Grant's tomb::
+Qui repose dans la Grant's tomb à New-York ? 
+{#
+=1000
+~%50%1000:20
+~%50%1000..2000
+#### Rétroaction globale
+}
