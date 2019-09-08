@@ -227,7 +227,7 @@ class Question():
             self.question += c
 
 
-q = Question("C:/Travail/UPF/Formation DIU EIL/Bloc_1/Projet/Fichiers_tests/Test001.txt")
+q = Question("Test001.txt")
 
 q.ReadGIFT()
 print("\""+q.titre+"\"")
