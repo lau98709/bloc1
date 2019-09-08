@@ -16,17 +16,20 @@ def SaisieManuelle():
 
 
 def GenerationAuto():
-#    bases = {'décimale','hexadécimale','binaire'}
-#
-#    q = Question()
-#    q.titre = "Question de conversion"
-#    i1 = randint(0,2)
-#    while True:
-#        i2 = randint(0,2)
-#        if (i1 != i2): break
-#    q.enonce = "Convertir le nombre "+base[i1]+" suivant en "+bases[i2]
-#    print(q.titre)
-#    print(q.enonce)
+
+    bases = ['décimale','hexadécimale','binaire']
+
+    q = Question()
+    q.titre = "Question de conversion"
+    i1 = randint(0,2)
+    while True:
+        i2 = randint(0,2)
+        if (i1 != i2): break
+    print(i1,i2)
+    print(bases[i1],bases[i2])
+    print("Convertir le nombre "+bases[i1]+" suivant en "+bases[i2])
+    print(q.titre)
+    print(q.enonce)
 
     print("Génération automatique des questions de conversion")
     Screen().input('Press [Enter] to continue')
