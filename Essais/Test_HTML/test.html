@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="feuilledestyle.css"></link>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function() {
+      // Masquer la réponse (à compléter)
+      $("#reponse").hide();
+      // Ajouter une gestion de l&#39;&eacute;v&eacute;nement du bouton qui permet
+      // de d&eacute;masquer / masquer la r&eacute;ponse (&agrave; compl&eacute;ter)
+      var data = '{ "titre" : "Questionnaire", "question" : "Quelle est la capitale de Tahiti ?", "reponse":"Papeete" }';
+		var myjson = JSON.parse(data); 
+		$("#titre").text(myjson.titre);
+                $("#question").text(myjson.question);
+      $("button").click(function(){
+		$("#reponse").text(myjson.reponse);
+                $("#reponse").toggle();
+		//alert(myjson.titre);
+	  });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="titre">Titre du questionnaire</h1>
+    <h3 id="question"> La question </h2>
+    <button type="button">Réponse</button>
+    <h3 id="reponse">La réponse</h3>
+  </body>
+  <footer id="footer">
+   
+  </footer>
+</html>
+
