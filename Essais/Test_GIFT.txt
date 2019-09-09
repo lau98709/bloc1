@@ -1,0 +1,6 @@
+::Grant's tomb::Qui repose dans la Grant's tomb à New-York ? %Q{#=1000~%50%100020~%50%
+=1897# Bonne réponse
+~%50%18972# Tu y es presque
+~%50%1896..1898# Acceptable
+#### La tombe du Général Grant a été construite le 27 Avril 1897 (Wikipédia)
+}

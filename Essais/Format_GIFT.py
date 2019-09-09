@@ -33,12 +33,14 @@ class Reponse():
     # type : 0 = QCM textuel
     #        1 = numérique
     #        2 = vrai ou faux
+    #        3 = libre
     
     type = None
     exact = False
-    pourcent = 100
+    pourcent = None
     text = None
     valeur = 0
+    delta = 0
     min = 0
     max = 0
     retroaction = None
@@ -71,33 +73,62 @@ class Reponse():
                 s2 = s2[i+1:]                
                 #print(pourcent, "\""+s2+"\"")
             else:
-                self.pourcent = 100
+                self.pourcent = None
             self.text = s2
             self.type = 0
 
 
     def ParseNum(self):
         # Interprétation d'une réponse numérique
-                
+
+        self.delta = 0                
         i = self.text.find("..")
         if (i != -1):           # Si interval
             self.min = int(self.text[0:i])
             self.max = int(self.text[i+2:])
             self.valeur = (self.min + self.max)/2
+            self.delta = -1
         elif (self.text.find(':') != -1):
             f = self.text.split(':')
             self.valeur = int(f[0])
             if (len(f) == 2):
                 # Si 2 champs, une valeur, un delta
-                delta = int(f[1])
-                self.min = self.valeur - delta
-                self.max = self.valeur + delta
+                self.delta = int(f[1])
+                self.min = self.valeur - self.delta
+                self.max = self.valeur + self.delta
         else:
             # Valeur unique
             self.valeur = self.min = self.max = int(self.text)
+            self.delta = 0
         self.type = 1
         #print(self.valeur, self.min, self.max)
-    
+
+
+    def WriteGIFT(self, fichier):
+        # Ecriture fichier format GIFT
+        if (self.exact):
+            fichier.write('=')
+        else:
+            fichier.write('~')
+            
+        if (self.pourcent != None):
+            fichier.write("%"+str(self.pourcent)+"%")
+            
+        if (self.type == 0):        # réponse QCM textuel
+            fichier.write(self.text)
+        elif (self.type == 1):      # réponse numérique
+            if (self.delta == -1):
+                fichier.write(str(self.min)+".."+str(self.max))
+            else:
+                fichier.write(str(self.valeur))
+                if (self.delta != 0):
+                    fichier.write(str(self.delta))
+                    
+        if (self.retroaction != ""):
+            fichier.write("#"+self.retroaction)
+        fichier.write("\n")
+            
+            
 
 class BlocReponses():
     # Représentation d'un bloc de réponse
@@ -105,6 +136,8 @@ class BlocReponses():
     reponses = None             # Liste des réponses
     type = 0                    # Type de questions
     retroaction = ""            # Rétroaction globale
+    vraifaux = False
+    text = ""
 
     def __init__(self):
         self.reponses = list()
@@ -125,9 +158,15 @@ class BlocReponses():
             #print(self.retroaction)
 
         sl = s.lower()
-        if ((sl == "t") or (sl == "f") or (sl == "True") or (sl == "false")):
+        if (len(s) == 0):
+            # Question libre
+            self.type = 3
+            text = ""
+            
+        elif ((sl == "t") or (sl == "f") or (sl == "true") or (sl == "false")):
             # Si question type vrai ou faux
             self.type = 2    # TRUE or FALSE
+            vraifaux = ((sl == "t") or (sl == "true"))
 
         else:
             # Type de question numérique ou QCM
@@ -151,6 +190,19 @@ class BlocReponses():
                 if (self.type == 1): res.ParseNum()
                 self.reponses.append(res)
                 #print(res.text)
+
+
+    def WriteGIFT(self, fichier):
+        fichier.write('{')
+        if (self.type == 1):        # si réponse numérique
+            fichier.write('#')
+        fichier.write("\n")
+        if (self.type != 3):
+            for res in self.reponses:
+                res.WriteGIFT(fichier)
+        if (self.retroaction != ""):
+            fichier.write("####"+self.retroaction+"\n")
+        fichier.write('}\n')
 
 
 class Question():
@@ -264,10 +316,23 @@ class Question():
     
     def WriteGIFT(self, nomfichier):
         self.fichier = io.open(nomfichier, mode="w", encoding="utf-8")     # Ouverture mode UTF-8
-        if (self.title != ""): self.fichier.write("::"+self.titre+"::")
-        if (self.enonce != ""): self.fichier.write(self.enonce)
+        if (self.titre != ""): self.fichier.write("::"+self.titre+"::\n")
+
+        i = -1
+        if (self.enonce != ""):
+            i = self.enonce.find("%Q")
+            if (i == -1):
+                self.fichier.write(self.enonce+"\n")
+            else:
+                self.fichier.write(self.enonce[:(i-1)]+"\n")
+
         if (self.bloc_reponses != None):
-            pass
+            self.bloc_reponses.WriteGIFT(self.fichier)
+ 
+        if ((self.enonce != "") and (i != -1)):
+            self.fichier.write(self.enonce[(i+3):])
+
+        self.fichier.close()
 
 #        
 #q = Question()
