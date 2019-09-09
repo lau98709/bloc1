@@ -24,7 +24,6 @@ def ReponseOuverte():
     print("Réponse ouverte")
     Screen().input('Appuyer [Entrer] pour continuer')
 
-
 #Choix de la saisie manuelle des questions
 def SaisieManuelle():
     print("Saisie manuelle des questions")
