@@ -1,0 +1,5 @@
+::Question de conversion::
+Convertir le nombre binaire "0b11001101" en hexadécimale.
+{#
+=CD#Bonne réponse
+}

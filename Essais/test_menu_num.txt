@@ -1,0 +1,9 @@
+::Titre::
+Question
+{#
+=1000#Bonne réponse
+~%50%999..1001#Acceptable
+~%25%1000:2#Passable
+####Merci
+}
+suite de la question

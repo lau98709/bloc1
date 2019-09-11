@@ -4,6 +4,6 @@ En quelle année a été construite la tombe du Général Grant ?
 {#
 =1897# Bonne réponse
 ~%50%1897:2# Tu y es presque
-~%50%1896..1898# Acceptable
+~%25%1894..1901# Acceptable
 #### La tombe du Général Grant a été construite le 27 Avril 1897 (Wikipédia)
 }

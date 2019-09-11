@@ -3,7 +3,7 @@
 Qui repose dans la Grant's tomb à New-York ? 
 {
 =Grant
-~Personne
+~%25%Personne
 #C'était vrai pendant 12 ans, mais la dépouille de Grant a été enterrée dans cette tombe en 1897.
 ~Napoléon
 #Il a été enterré en France.

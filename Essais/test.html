@@ -11,7 +11,7 @@ $(document).ready(function() {
 	$("#reponse").hide();
 // Ajouter une gestion de l&#39;&eacute;v&eacute;nement du bouton qui permet
 // de d&eacute;masquer / masquer la r&eacute;ponse (&agrave; compl&eacute;ter)
-	$("button").click(function(){
+	$("#btn_reponse").click(function(){
 		var data = '{ "titre" : "Titre de la question", "enonce" : "Enonce de la question" }';
 		var myjson = JSON.parse(data);
 		$("#reponse").text(myjson.titre);
@@ -26,8 +26,7 @@ $(document).ready(function() {
     <div id="blague">
         Qu'est-ce qui est jaune et qui attend ?
     </div>
-    <button type="button">Réponse</button>
-    <button type="button">Réponse</button>
+    <button type="button" id="btn_reponse">Réponse</button>
     <div id="reponse">
         C'est Jonathan !
     </div>

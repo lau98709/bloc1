@@ -1,0 +1,8 @@
+::Titre::
+Question
+{
+=Réponse1#Bonne réponse
+~%5°%Réponse2#Réponse acceptable
+####Merci d'avoir répondu
+}
+Suite de la question
