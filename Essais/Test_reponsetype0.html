@@ -1,0 +1,144 @@
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+	function HideAll() {
+		for (i=0; i<=3; i++) {
+			$("#blocreponset"+i).hide()
+		}
+	}
+
+	$(document).ready(function() {
+		var data = '{ \
+"titre" : "Grant\'s tomb", \
+"enonce" : "Qui repose dans la Grant\'s tomb à New-York \? ", \
+"fin_enonce" : "", \
+"blocreponse" : {"type" : "0", \
+"retroaction" : "", \
+"num_reponse" : "5", \
+"reponse" : [\
+{"type" : "0", \
+"exact" : "1", \
+"text" : "Grant", \
+"retroaction" : ""}, \
+{"type" : "0", \
+"exact" : "0", \
+"pourcent" : "25", \
+"text" : "Personne", \
+"retroaction" : "C\'était vrai pendant 12 ans, mais la dépouille de Grant a été enterrée dans cette tombe en 1897."}, \
+{"type" : "0", \
+"exact" : "0", \
+"pourcent" : "", \
+"text" : "Napoléon", \
+"retroaction" : "Il a été enterré en France."}, \
+{"type" : "0", \
+"exact" : "0", \
+"pourcent" : "", \
+"text" : "Churchill", \
+"retroaction" : "Il a été enterré en Angleterre."}, \
+{"type" : "0", \
+"exact" : "0", \
+"pourcent" : "", \
+"text" : "Mère Teresa", \
+"retroaction" : "Elle a été enterrée en Inde."}\
+]}\
+}';
+		var myjson = JSON.parse(data);
+
+		HideAll();
+		$("#retro").hide();
+		
+		if (myjson.blocreponse.type == 0) {
+			$("#blocreponset0").show();
+			$("#titre").text(myjson.titre);
+			$("#enonce").text(myjson.enonce);
+			$("#finenonce").text(myjson.fin_enonce);
+			
+			var nr = myjson.blocreponse.num_reponse;
+			
+			for (i=0; i<10; i++) {
+				if (i < nr) {
+					$("#reponset0l"+(i+1)).text(myjson.blocreponse.reponse[i].text);
+				} else {
+					$("#reponset0d"+(i+1)).hide();
+				}
+			}
+		}
+		
+		$("#reponset0ok").click(function() {
+			choice = parseInt($('input[name=reponset0]:checked').val())
+			$("#retroaction").text(myjson.blocreponse.reponse[choice].retroaction);
+			$("#retroactiongenerale").text(myjson.blocreponse.retroaction);
+
+			var retro = ""
+			if (myjson.blocreponse.reponse[choice].exact == "1") {
+				retro = "EXACT. ";
+			} else {
+				retro = "FAUX. ";
+				if (myjson.blocreponse.reponse[choice].pourcent != "") {
+					retro = retro + "\n Vous avez " + myjson.blocreponse.reponse[choice].pourcent + "\% des points";
+				}
+			}
+			$("#retroactiongenerale2").text(retro);
+			
+			$("#retro").show();
+			
+			return false;
+		});
+	});
+</script>
+
+</head>
+<body>
+    <p id="titre">Titre de la question</p>
+	<p id="enonce">Enoncé de la question</p>
+
+	
+	<form  id="blocreponset0">
+		<div>
+			<div id="reponset0d1"><input type="radio" id="reponset0r1" name="reponset0" value="0"><label for="reponset0r1" id="reponset0l1">Type 0 réponse 1</label></div>
+			<div id="reponset0d2"><input type="radio" id="reponset0r2" name="reponset0" value="1"><label for="reponset0r2" id="reponset0l2">Type 0 réponse 2</label></div>
+			<div id="reponset0d3"><input type="radio" id="reponset0r3" name="reponset0" value="2"><label for="reponset0r3" id="reponset0l3">Type 0 réponse 3</label></div>
+			<div id="reponset0d4"><input type="radio" id="reponset0r4" name="reponset0" value="3"><label for="reponset0r4" id="reponset0l4">Type 0 réponse 4</label></div>
+			<div id="reponset0d5"><input type="radio" id="reponset0r5" name="reponset0" value="4"><label for="reponset0r5" id="reponset0l5">Type 0 réponse 5</label></div>
+			<div id="reponset0d6"><input type="radio" id="reponset0r6" name="reponset0" value="5"><label for="reponset0r6" id="reponset0l6">Type 0 réponse 6</label></div>
+			<div id="reponset0d7"><input type="radio" id="reponset0r7" name="reponset0" value="6"><label for="reponset0r7" id="reponset0l7">Type 0 réponse 7</label></div>
+			<div id="reponset0d8"><input type="radio" id="reponset0r8" name="reponset0" value="7"><label for="reponset0r8" id="reponset0l8">Type 0 réponse 8</label></div>
+			<div id="reponset0d9"><input type="radio" id="reponset0r9" name="reponset0" value="8"><label for="reponset0r9" id="reponset0l9">Type 0 réponse 9</label></div>
+			<div id="reponset0d10"><input type="radio" id="reponset0r10" name="reponset0" value="9"><label for="reponset0r10" id="reponset0l10">Type 0 réponse 10</label></div>
+			<button id="reponset0ok" name="reponset0">Valider</button>
+		</div>
+	</form>
+	
+	
+	<form id="blocreponset1">
+		<input type="text" id="reponset1">
+		<button id="reponset1ok">OK</button>
+	</form>
+
+
+	<form  id="blocreponset2">
+		<div>
+			<input type="radio" id="reponset2r1" name="reponset2"><label for="reponset2r1" id="reponset2l1">Vrai</label><br>
+			<input type="radio" id="reponset2r2" name="reponset2"><label for="reponset0r2" id="reponset2l2">Faux</label><br>
+			<button id="reponset2ok" name="reponset2">OK</button>
+		</div>
+	</form>
+	
+	
+	<form id="blocreponset3">
+		<input type="text" id="reponset3">
+		<button id="reponset3ok">OK</button>
+	</form>
+
+	
+	<p id="finenonce">La fin de l'énoncé</p>
+	<div id="retro">
+		<p id="retroaction">Rétroaction réponse</p>
+		<p id="retroactiongenerale">Rétroaction générale</p>
+		<p id="retroactiongenerale2">Rétroaction générale 2</p>
+	</div>
+</body>
+</html>

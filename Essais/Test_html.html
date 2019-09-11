@@ -1,0 +1,269 @@
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+	$(document).ready(function() {
+		var data = '{ \
+"titre" : "Question de conversion", \
+"enonce" : "Convertir le nombre binaire \\"0b11001101\\" en hexadécimale.", \
+"fin_enonce" : "", \
+"blocreponse" : {"type" : "1", \
+"retroaction" : "", \
+"num_reponse" : "1", \
+"reponse" : [\
+{"type" : "1", \
+"exact" : "1", \
+"valeur" : "0", \
+"text" : "CD", \
+"delta" : "0", \
+"retroaction" : "Bonne réponse"}\
+]}\
+}';
+		var myjson = JSON.parse(data);
+
+		// Cacher toutes les zones de réponses et de rétroactions
+		for (i=0; i<=3; i++) {
+			$("#blocreponset"+i).hide()
+		}
+		$("#retro").hide();
+		
+		if (myjson.blocreponse.type == 0) {
+			//
+			// Traitement des réponse de type 0, QCM textuel
+			//
+			$("#blocreponset0").show();
+			$("#titre").text(myjson.titre);
+			$("#enonce").text(myjson.enonce);
+			$("#finenonce").text(myjson.fin_enonce);
+			
+			var nr = myjson.blocreponse.num_reponse;
+			
+			for (i=0; i<10; i++) {
+				if (i < nr) {
+					$("#reponset0l"+(i+1)).text(myjson.blocreponse.reponse[i].text);
+				} else {
+					$("#reponset0d"+(i+1)).hide();
+				}
+			}
+		
+			$("#reponset0ok").click(function() {
+				choice = parseInt($('input[name=reponset0]:checked').val())
+				$("#retroaction").text(myjson.blocreponse.reponse[choice].retroaction);
+				$("#retroactiongenerale").text(myjson.blocreponse.retroaction);
+
+				var retro = ""
+				if (myjson.blocreponse.reponse[choice].exact == "1") {
+					retro = "EXACT. ";
+				} else {
+					retro = "FAUX. ";
+					if (myjson.blocreponse.reponse[choice].pourcent != "") {
+						retro = retro + "\n Vous avez " + myjson.blocreponse.reponse[choice].pourcent + "\% des points";
+					}
+				}
+				$("#retroactiongenerale2").text(retro);
+				
+				$("#retro").show();
+				
+				return false;
+			});
+			
+		} else if (myjson.blocreponse.type == 1) {
+			//
+			// Traitement des réponse de type 1, numérique
+			//			
+			
+			$("#blocreponset1").show();
+			$("#titre").text(myjson.titre);
+			$("#enonce").text(myjson.enonce);
+			$("#finenonce").text(myjson.fin_enonce);
+			$("#reponset1").val('');
+		
+			$("#reponset1ok").click(function () {
+				reps = $("#reponset1").val();	// Réponse format texte
+				rep = parseInt(reps);			// Réponse numérique
+				
+				var exact = 0;			// 0 = faux, 1 = bonne réponse
+				var pourcent = 0;		// pourcentage des points du reponse[best]
+				var best = -1;			// L'index de la meilleure réponse
+				
+				for (i=0; i<myjson.blocreponse.num_reponse; i++) {
+					// Vérification avec les réponses
+					// Si bonne réponse, quitter la boucle
+					// Sinon, pour toutes les mauvaises réponses trouver le meilleur pourcentage
+					
+					var text = myjson.blocreponse.reponse[i].text;
+					var v = parseInt(myjson.blocreponse.reponse[i].valeur);
+					var delta = parseInt(myjson.blocreponse.reponse[i].delta);
+					
+					if (myjson.blocreponse.reponse[i].delta == "0") {
+						// Réponse à valeur unique
+						if (reps == text) {
+							// La comparaison se fait sur le texte de la valeur.
+							// Cela permet d'être compatible avec les questions de conversion.
+							if (myjson.blocreponse.reponse[i].exact == "1") {
+								exact = 1;								
+								best = i;
+								break;		// Bonne réponse, sortir de la boucle
+							}
+						}
+					} else if (myjson.blocreponse.reponse[i].delta == "-1") {
+						// Réponse avec interval
+						var min = parseInt(myjson.blocreponse.reponse[i].min);
+						var max = parseInt(myjson.blocreponse.reponse[i].max);
+						if ((min <= rep) && (rep <= max)) {
+							if (myjson.blocreponse.reponse[i].exact == "1") {
+								exact = 1;
+								best = i;
+								break;
+							} else {
+								exact = 0;
+								p = parseInt(myjson.blocreponse.reponse[i].pourcent);
+								if (p > pourcent) {
+									best = i;
+									pourcent = p;
+								}
+							}
+						}
+					} else {
+						// Réponse avec "delta"
+						if ((v-delta <= rep) && (rep <= v+delta)) {
+							if (myjson.blocreponse.reponse[i].exact == "1") {
+								exact = 1; 
+								best = i;
+								break;
+							} else {
+								exact = 0;
+								p = parseInt(myjson.blocreponse.reponse[i].pourcent);
+								if (p > pourcent) {
+									best = i;
+									pourcent = p;
+								}
+							}
+						}
+					}
+				}
+				if (best != -1) {
+					// Si bonne réponse ou meilleure "mauvaise" réponse trouvée
+					$("#retroaction").text(myjson.blocreponse.reponse[best].retroaction);
+					$("#retroactiongenerale").text(myjson.blocreponse.retroaction);
+					var text;
+					if (exact == 1) {
+						text = "EXACT. ";
+					} else {
+						text = "FAUX. Mais vous avez quand même "+pourcent+"\% des points";
+					}
+					$("#retroactiongenerale2").text(text);
+				} else {
+					// Mauvaise réponse, aucune correspondance
+					$("#retroaction").text("");
+					$("#retroactiongenerale").text("");
+					$("#retroactiongenerale2").text("FAUX");
+				}
+				$("#retro").show();
+				
+				return false;
+			});
+		
+		} else if (myjson.blocreponse.type == 2) {
+			//
+			// Traitement des réponse de type 2, vrai ou faux
+			//
+			$("#blocreponset2").show();
+			$("#titre").text(myjson.titre);
+			$("#enonce").text(myjson.enonce);
+			$("#finenonce").text(myjson.fin_enonce);
+			
+			$("#reponset2ok").click(function() {
+				choice = $('input[name=reponset2]:checked').val();
+
+				$("#retroaction").text("");
+				$("#retroactiongenerale").text("");
+				if (choice == myjson.blocreponse.vraifaux) {
+					// Bonne réponse
+					$("#retroactiongenerale2").text("VRAI");
+				} else {
+					// Mauvaise réponse
+					$("#retroactiongenerale2").text("FAUX");
+				}
+
+				$("#retro").show();
+				return false;
+			});
+		} else if (myjson.blocreponse.type == 3) {
+			//
+			// Traitement des réponse de type 3, libre
+			//
+			$("#blocreponset3").show();
+			$("#titre").text(myjson.titre);
+			$("#enonce").text(myjson.enonce);
+			$("#finenonce").text(myjson.fin_enonce);
+			
+			$("#reponset3ok").click(function() {
+				// Affichage du texte saisie, pas de traitement particulier
+				
+				// L'enregistrement de la réponse pour correction n'est pas
+				// réalisable uniquement en javascript sans serveur.
+				
+				rep = $("#reponset3").val();
+				alert("Votre réponse : "+rep);
+				return false;
+			});
+		}
+	});
+</script>
+
+</head>
+<body>
+    <p id="titre">Titre de la question</p>
+	<p id="enonce">Enoncé de la question</p>
+
+	
+	<form  id="blocreponset0">
+		<div>
+			<div id="reponset0d1"><input type="radio" id="reponset0r1" name="reponset0" value="0"><label for="reponset0r1" id="reponset0l1">Type 0 réponse 1</label></div>
+			<div id="reponset0d2"><input type="radio" id="reponset0r2" name="reponset0" value="1"><label for="reponset0r2" id="reponset0l2">Type 0 réponse 2</label></div>
+			<div id="reponset0d3"><input type="radio" id="reponset0r3" name="reponset0" value="2"><label for="reponset0r3" id="reponset0l3">Type 0 réponse 3</label></div>
+			<div id="reponset0d4"><input type="radio" id="reponset0r4" name="reponset0" value="3"><label for="reponset0r4" id="reponset0l4">Type 0 réponse 4</label></div>
+			<div id="reponset0d5"><input type="radio" id="reponset0r5" name="reponset0" value="4"><label for="reponset0r5" id="reponset0l5">Type 0 réponse 5</label></div>
+			<div id="reponset0d6"><input type="radio" id="reponset0r6" name="reponset0" value="5"><label for="reponset0r6" id="reponset0l6">Type 0 réponse 6</label></div>
+			<div id="reponset0d7"><input type="radio" id="reponset0r7" name="reponset0" value="6"><label for="reponset0r7" id="reponset0l7">Type 0 réponse 7</label></div>
+			<div id="reponset0d8"><input type="radio" id="reponset0r8" name="reponset0" value="7"><label for="reponset0r8" id="reponset0l8">Type 0 réponse 8</label></div>
+			<div id="reponset0d9"><input type="radio" id="reponset0r9" name="reponset0" value="8"><label for="reponset0r9" id="reponset0l9">Type 0 réponse 9</label></div>
+			<div id="reponset0d10"><input type="radio" id="reponset0r10" name="reponset0" value="9"><label for="reponset0r10" id="reponset0l10">Type 0 réponse 10</label></div>
+			<button id="reponset0ok" name="reponset0">Valider</button>
+		</div>
+	</form>
+	
+	
+	<form id="blocreponset1">
+		<input type="text" id="reponset1">
+		<button id="reponset1ok">OK</button>
+	</form>
+
+
+	<form  id="blocreponset2">
+		<div>
+			<input type="radio" id="reponset2r1" name="reponset2" value="vrai"><label for="reponset2r1" id="reponset2l1">Vrai</label><br>
+			<input type="radio" id="reponset2r2" name="reponset2" value="faux"><label for="reponset0r2" id="reponset2l2">Faux</label><br>
+			<button id="reponset2ok" name="reponset2">OK</button>
+		</div>
+	</form>
+	
+	
+	<form id="blocreponset3">
+		<textarea type="text" id="reponset3"></textarea>
+		<br>
+		<button id="reponset3ok">OK</button>
+	</form>
+
+	
+	<p id="finenonce">La fin de l'énoncé</p>
+	<div id="retro">
+		<p id="retroaction">Rétroaction réponse</p>
+		<p id="retroactiongenerale">Rétroaction générale</p>
+		<p id="retroactiongenerale2">Rétroaction générale 2</p>
+	</div>
+</body>
+</html>
