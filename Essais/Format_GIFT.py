@@ -33,7 +33,7 @@ def AddSlash( s ):
     so = ""
     for i in range(0,len(s)):
         if (s[i] in charsp):
-            so += "\\\\"
+            so += "\\"
         so += s[i]
     return so
 
