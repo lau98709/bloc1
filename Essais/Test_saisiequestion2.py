@@ -275,7 +275,7 @@ def GenerationAuto():
     else:
         aconvertir = str(nombre)
 
-    q.enonce = "Convertir le nombre %s \"%s\" en %s." % (bases[i1],aconvertir,bases[i2])
+    q.enonce = "Convertir le nombre %s \'%s\' en %s." % (bases[i1],aconvertir,bases[i2])
 
     print(q.enonce)
     print("Réponse : %s" % (rep.text))

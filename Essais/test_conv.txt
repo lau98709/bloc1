@@ -1,5 +1,5 @@
 ::Question de conversion::
-Convertir le nombre binaire "0b11001101" en hexadécimale.
+Convertir le nombre binaire '0b1101010111' en décimale.
 {#
-=CD#Bonne réponse
+=855#Bonne réponse
 }
