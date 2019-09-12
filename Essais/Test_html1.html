@@ -6,19 +6,35 @@
 <script>
 	$(document).ready(function() {
 		var data = '{ \
-"titre" : "Question de conversion", \
-"enonce" : "Convertir le nombre binaire \'0b1101010111\' en décimale.", \
+"titre" : "Grant\'s tomb", \
+"enonce" : "En quelle année a été construite la tombe du Général Grant \? ", \
 "fin_enonce" : "", \
 "blocreponse" : {"type" : "1", \
-"retroaction" : "", \
-"num_reponse" : "1", \
+"retroaction" : " La tombe du Général Grant a été construite le 27 Avril 1897 (Wikipédia)", \
+"num_reponse" : "3", \
 "reponse" : [\
 {"type" : "1", \
 "exact" : "1", \
-"valeur" : "855", \
-"text" : "855", \
+"valeur" : "1897", \
+"text" : "1897", \
 "delta" : "0", \
-"retroaction" : "Bonne réponse"}\
+"retroaction" : " Bonne réponse"}, \
+{"type" : "1", \
+"exact" : "0", \
+"pourcent" : "50", \
+"valeur" : "1897", \
+"text" : "1897", \
+"delta" : "2", \
+"retroaction" : " Tu y es presque"}, \
+{"type" : "1", \
+"exact" : "0", \
+"pourcent" : "25", \
+"min" : "1894", \
+"max" : "1901", \
+"delta" : "-1", \
+"valeur" : "1897.5", \
+"text" : "1897.5", \
+"retroaction" : " Acceptable"}\
 ]}\
 }';
 		var myjson = JSON.parse(data);

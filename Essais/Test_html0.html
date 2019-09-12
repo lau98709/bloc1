@@ -6,19 +6,37 @@
 <script>
 	$(document).ready(function() {
 		var data = '{ \
-"titre" : "Question de conversion", \
-"enonce" : "Convertir le nombre binaire \'0b1101010111\' en décimale.", \
+"titre" : "Grant\'s tomb", \
+"enonce" : "Qui repose dans la Grant\'s tomb à New-York \? ", \
 "fin_enonce" : "", \
-"blocreponse" : {"type" : "1", \
+"blocreponse" : {"type" : "0", \
 "retroaction" : "", \
-"num_reponse" : "1", \
+"num_reponse" : "5", \
 "reponse" : [\
-{"type" : "1", \
+{"type" : "0", \
 "exact" : "1", \
-"valeur" : "855", \
-"text" : "855", \
-"delta" : "0", \
-"retroaction" : "Bonne réponse"}\
+"text" : "Grant", \
+"retroaction" : ""}, \
+{"type" : "0", \
+"exact" : "0", \
+"pourcent" : "25", \
+"text" : "Personne", \
+"retroaction" : "C\'était vrai pendant 12 ans, mais la dépouille de Grant a été enterrée dans cette tombe en 1897."}, \
+{"type" : "0", \
+"exact" : "0", \
+"pourcent" : "", \
+"text" : "Napoléon", \
+"retroaction" : "Il a été enterré en France."}, \
+{"type" : "0", \
+"exact" : "0", \
+"pourcent" : "", \
+"text" : "Churchill", \
+"retroaction" : "Il a été enterré en Angleterre."}, \
+{"type" : "0", \
+"exact" : "0", \
+"pourcent" : "", \
+"text" : "Mère Teresa", \
+"retroaction" : "Elle a été enterrée en Inde."}\
 ]}\
 }';
 		var myjson = JSON.parse(data);
