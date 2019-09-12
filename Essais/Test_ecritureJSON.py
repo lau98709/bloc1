@@ -12,6 +12,6 @@ from Format_GIFT import *
 
 q = Question()
 
-q.ReadGIFT("test_conv.txt")
+q.ReadGIFT("Test002.txt")
 
-q.WriteHTML("Test_html.html","QuestionTemplate.html")
+q.WriteHTML("Test_html2.html","QuestionTemplate.html")
