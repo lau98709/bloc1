@@ -407,7 +407,7 @@ class Question():
 
 
     def ReadBlocReponses(self):
-        # Lecture d'un bloc réponse {}
+        # Lecture d'un bloc réponse {} "brut" et renvoie la chaine de caractères
         s = ""
         while True:
             c = self.Read()
