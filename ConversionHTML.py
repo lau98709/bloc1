@@ -15,8 +15,8 @@ import sys
 
 
 if (len(sys.argv) >= 3):
-    gift_name = sys.argv[1]
-    out_name = sys.argv[2]
+    gift_name = sys.argv[1]     # premier argument fichier gift
+    out_name = sys.argv[2]      # deuxième argument fichier de sortie html
 else:
     print("Donnez le nom du fichier GIFT de la question :")
     gift_name = input()   
