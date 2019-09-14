@@ -1,0 +1,6 @@
+::Ville de Jésus::Jésus a grandi dans la ville de {
+   ~Jérusalem#C'était une ville importante, mais ce n'est pas la bonne réponse.
+   ~%25%Bethléhem#C'était sa ville de naissance, mais ce n'est pas l'endroit où il a grandi.
+   ~%50%Galilée#Vous devez être plus précis.
+   =Nazareth#Oui, c'est la bonne réponse!
+}.

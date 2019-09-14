@@ -1,0 +1,6 @@
+Parmi ces personnes, nommez-en deux qui sont enterrées dans la Grant's tomb. {
+   ~%-100%Personne
+   ~%50%Grant
+   ~%50%L'épouse de Grant
+   ~%-100%Le père de Grant
+}

@@ -1,0 +1,17 @@
+#titre {
+background-color : gray;
+text-align : center;
+font-size : 35px;
+font-weight: bold;
+}
+
+#enonce {
+color : blue;
+font-size : 25px;
+}
+
+#retroaction, #retroactiongenerale, #retroactiongenerale2 {
+color : red;
+font-weight: bold;
+font-size : 20px;
+}

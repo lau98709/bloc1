@@ -1,0 +1,5 @@
+::Ville de Jésus::Jésus a grandi dans la ville de {
+=Nazareth#Oui, c'est la bonne réponse !
+=%75%Nazarette#Bonne réponse, mauvaise orthographe.
+=%25%Bethléhem#C'était sa ville de naissance, mais ce n'est pas l'endroit où il a grandi.
+}

@@ -1,0 +1,2 @@
+// Question : 0 Nom : Proposition fausse
+::Proposition fausse à propos du soleil::Le soleil se lève à l'Ouest.{FALSE}

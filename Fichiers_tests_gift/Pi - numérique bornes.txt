@@ -1,0 +1,1 @@
+Quelle est la valeur de pi (incluant 3 chiffres après la virgule) ? {#3,141..3,142}.

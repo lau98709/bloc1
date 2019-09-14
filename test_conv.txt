@@ -1,0 +1,5 @@
+::Question de conversion::
+Convertir le nombre binaire '0b1101010111' en décimale.
+{#
+=855#Bonne réponse
+}

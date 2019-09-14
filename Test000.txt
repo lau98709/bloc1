@@ -1,0 +1,14 @@
+// Question : 1 Nom : Grant's tomb
+::Grant's tomb::
+Qui repose dans la Grant's tomb à New-York ? 
+{
+=Grant
+~%25%Personne
+#C'était vrai pendant 12 ans, mais la dépouille de Grant a été enterrée dans cette tombe en 1897.
+~Napoléon
+#Il a été enterré en France.
+~Churchill
+#Il a été enterré en Angleterre.
+~Mère Teresa
+#Elle a été enterrée en Inde.
+}

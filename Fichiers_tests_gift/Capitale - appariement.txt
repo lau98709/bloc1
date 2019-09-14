@@ -1,0 +1,6 @@
+Appariez les pays suivants avec les capitales correspondantes. {
+   =Canada -> Ottawa
+   =Italie -> Rome
+   =Japon -> Tokyo
+   =Inde -> New Delhi
+}

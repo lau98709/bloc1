@@ -1,0 +1,6 @@
+Qui sont les deux personnes qui sont enterrés dans la Grant's tomb ? {
+~Personne
+~%50%Grant
+~%50%L'épouse de Grant
+~Le père de Grant
+}

@@ -1,0 +1,9 @@
+::Caractères de contrôle GIFT::
+Lequel de ces caractères n'est PAS un caractère de contrôle dans le format d'importation GIFT ? {
+~ \~     # \~ est un caractère de contrôle.
+~ \=     # \= est un caractère de contrôle.
+~ \#     # \# est un caractère de contrôle.
+~ \{     # \{ est un caractère de contrôle.
+~ \}     # \} est un caractère de contrôle.
+= \      # Correct! \ (La barre oblique inverse) n'est pas un caractère de contrôle, MAIS, elle est utilisée pour éviter l'activation des caractères de contrôle.
+}
